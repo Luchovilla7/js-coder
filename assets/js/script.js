@@ -1,30 +1,21 @@
-//num1 va a ser un valor el cual se va a sumar en cada iteración con el valor que se ingrese 5 veces en num2
+//Simulador interactivo de productos 
 
-var num1 = parseInt(prompt("Ingresar primer número de suma"));
-var resultado;
-for (i = 0; i < 5; i++) {
-    var num2 = parseInt(prompt("Ingrese número a sumar"));
-    resultado = num1 + num2;
-    console.log(num1 + "+" + num2 + "=" + resultado);
+//Simulador para calcular el monto total de tu compra
+function calcular (precioProducto, cantidadProducto, porDescuento, costEnvio) {
+    let descuento = (precioProducto * porDescuento) / 100;
+    let precioDescuento = precioProducto - descuento;
+    //retorno el precio final con descuento y costo de envio, multiplicado por la cantidad de peoductos
+    return (precioDescuento * cantidadProducto) + costEnvio;
 }
 
-//Concatenar el primer texto ingresado con el resto hasta que el usuario ingrese "ESC"
+const envio = 1200; 
 
-var firstText = prompt("ingresa texto");
-var textGlobal = firstText;
-var text = " ";
+//Pido al usuario lo siguiente:
+let producto = parseFloat(prompt("Ingrese el precio del producto que desea comprar:"));
+let cantidad = parseInt(prompt("Ingrese la cantidad de unidades que desea comprar del mismo producto:"));
+let descuento = parseInt(prompt("Ingrese tu cupón de descuento:"));
 
-while (text != 'ESC') {
-    text = prompt('Ingrese un texto a concatenar, ingresar "ESC" para salir');
-    textGlobal = textGlobal + " " + text;
-    console.log(textGlobal);
-}
-
-//Ingrese la cantidad de veces que se repita el nombre y despues ingreso el nombre a repetir, ejecutado en la consola
-
-var num1 = parseInt(prompt("Ingresar la cantidad de veces que quieres repetir el nombre"));
-var nombre = prompt("ingrese nombre");
-
-for (i = 1; i <= num1; i++) {
-    console.log(nombre);
-}
+//llamo a la funcion y luego muestro el precio final atraves de un alert
+let precioFinal = calcular(producto, cantidad, descuento, envio);
+alert("El precio total de tu compra es $" + precioFinal);
+alert("¡Gracias por tu compra y por elegirnos, Saludos Saiyajin! 🔥");
