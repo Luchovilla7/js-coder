@@ -1,104 +1,92 @@
-/*//Simulador interactivo de productos 
+//Array de objetos de los productos 
 
-//Simulador para calcular el monto total de tu compra
-function calcular (precioProducto, cantidadProducto, porDescuento, costEnvio) {
-    let descuento = (precioProducto * porDescuento) / 100;
-    let precioDescuento = precioProducto - descuento;
-    //retorno el precio final con descuento y costo de envio, multiplicado por la cantidad de peoductos
-    return (precioDescuento * cantidadProducto) + costEnvio;
+const productos =[
+    {id:01, tipo:"Ropa", nombre:"Remera Vegeta Dark", precio: 4300, foto: "assets/img/remera-vegeta.jpg"},
+    {id:02, tipo:"Accesorios", nombre:"Esferas del Dragon", precio: 12000, foto: "assets/img/esferas.jpg"},
+    {id:03, tipo:"Accesorios", nombre:"Figura Gogeta", precio: 10000, foto: "assets/img/gogeta-figure.jpg"},
+    {id:04, tipo:"Accesorios", nombre:"Lampara Henki Dama", precio: 5800, foto: "assets/img/lampara-goku.jpg"},
+    {id:05, tipo:"Accesorios", nombre:"Poster Saga de Cell", precio: 3000, foto: "assets/img/poster.png"},
+    {id:06, tipo:"Ropa", nombre:"Remera Light Dragon Ball", precio: 4000, foto: "assets/img/db.jpg"},
+    {id:07, tipo:"Accesorios", nombre:"Taza + individual", precio: 2500, foto: "assets/img/tazas-individual.jpg"},
+    {id:08, tipo:"Accesorios", nombre:"Stickers", precio: 500, foto: "assets/img/stickers.jpg"},
+    {id:09, tipo:"Juego de Cartas", nombre:"Game Cards Dragon Ball", precio: 1600, foto: "assets/img/juego.db.jpg"}
+];
+
+//variables de array de carrito y llamando con el id de las etiquetas html 
+
+let carrito = [];
+let sectionProductos = document.getElementById("section-productos");
+let sectionCarrito = document.getElementById("section-carrito");
+
+//creacion de la seccion carrito con DOM
+let totalCompra = document.createElement("div");
+totalCompra.innerHTML = "<h2>Total: $</h2>";
+sectionCarrito.appendChild(totalCompra);
+
+let montoTotalCompra = document.createElement("h2");
+montoTotalCompra.innerText = "0";
+totalCompra.appendChild(montoTotalCompra);
+
+let cantidadProductos = document.createElement("div");
+cantidadProductos.innerHTML = "<h3>Cantidad: </h3>";
+sectionCarrito.appendChild(cantidadProductos);
+
+let cantProductos = document.createElement("h3");
+cantProductos.innerText = " 0";
+cantidadProductos.appendChild(cantProductos);
+
+let botonFinalizar = document.createElement("button");
+botonFinalizar.innerText = "Finalizar compra";
+sectionCarrito.appendChild(botonFinalizar);
+botonFinalizar.setAttribute("class", "boton");
+
+//Le agrego un evento al boton para que muestre el precio final y despues vacie el carrito
+botonFinalizar.onclick = () => {
+    const precioFinal = montoTotalCompra.innerText;
+    alert("Total a pagar: $" + precioFinal);
+    alert("¡Gracias por tu compra y por elegirnos, Saludos Saiyajin! 🔥");
+    vaciarCarrito();
 }
 
-const envio = 1200; 
+//Renderizado de los productos en cards
+for (const producto of productos) {
+    let container = document.createElement("div");
+    container.setAttribute("class", "card-product");
+    container.innerHTML = ` <div class="img-container">
+                            <img src="${producto.foto}" alt="${producto.nombre}" class="img-product"/>
+                            </div>
+                            <div class="info-producto">
+                            <p class="font">${producto.nombre}</p>
+                            <strong class="font">$${producto.precio}</strong>
+                            <button class="boton" id="${producto.id}"> Agregar al carrito </button>
+                            </div>`;
+    sectionProductos.appendChild(container);
+    //Evento para que los productos se agreguen al carrito al hacer click en el boton
+    document.getElementById(`${producto.id}`).onclick = () => agregarAlCarrito(`${producto.id}`);
+}
 
-//Pido al usuario lo siguiente:
-let producto = parseFloat(prompt("Ingrese el precio del producto que desea comprar:"));
-let cantidad = parseInt(prompt("Ingrese la cantidad de unidades que desea comprar del mismo producto:"));
-let descuento = parseInt(prompt("Ingrese tu cupón de descuento:"));
+//Funciones
+function agregarAlCarrito(id) {
+    carrito.push(productos.find(p => p.id == id));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    calcularTotalCarrito();
+}
 
-//llamo a la funcion y luego muestro el precio final atraves de un alert
-let precioFinal = calcular(producto, cantidad, descuento, envio);
-alert("El precio total de tu compra es $" + precioFinal);
-alert("¡Gracias por tu compra y por elegirnos, Saludos Saiyajin! 🔥");*/
-
-
-
-
-//Creo la clase de objeto producto como base para cargar los productos 
-class Producto {
-    constructor(nombre, id, precio, stock) {
-        this.nombre = nombre;
-        this.id = id;
-        this.precio = precio;
-        this.stock = stock;
+function calcularTotalCarrito() {
+    let total = 0;
+    for (const producto of carrito) {
+        total += producto.precio;
     }
-
-    vender(cantidad) {
-        this.stock = this.stock - cantidad;
-    }
+    montoTotalCompra.innerText = total;
+    cantProductos.innerText = carrito.length;
 }
 
-//Inicializo los arrays para las categorias de los productos
-const ropas = [];
-const accesorios = [];
-const juegos = [];
-
-//Cargo el stock de productos segun su categoria
-//REMERAS
-ropas.push(new Producto("Remera Vegeta Negra", 1, 3200, 30));
-ropas.push(new Producto("Musculosa Ultra Instinto", 2, 3600, 10));
-ropas.push(new Producto("Buzo Sheng Long", 3, 8000, 20));
-ropas.push(new Producto("Maya Nube Voladora", 4, 1900, 15));
-//BUZOS
-accesorios.push(new Producto("Figuras de acción XL", 5, 10000, 20));
-accesorios.push(new Producto("Lámparas Z", 6, 3800, 40));
-accesorios.push(new Producto("Posters", 7, 2500, 40));
-//PANTALONES
-juegos.push(new Producto("Juego de Cartas", 8, 1500, 10));
-juegos.push(new Producto("Juego de Mesa Saiyajin", 9, 4800, 10));
-
-
-//Recorro los arrays para mostrarle los productos al usuario
-for (const ropa of ropas) {
-    alert("ID (" + ropa.id + ") - " + ropa.nombre);
-}
-for (const accesorio of accesorios) {
-    alert("ID (" + accesorio.id + ") - " + accesorio.nombre);
-}
-for (const juego of juegos) {
-    alert("ID (" + juego.id + ") - " + juego.nombre);
+function vaciarCarrito() {
+    montoTotalCompra.innerText = "0";
+    cantProductos.innerText = "0";
+    localStorage.clear();
+    carrito=[];
 }
 
-//Funcion para calcular el precio final de la compra del producto
-function calculoPrecio(precioProducto, cantidadProducto, costoEnvio) {
-    return ((precioProducto * 1.21) * cantidadProducto) + costoEnvio;
-}
 
-//Solicito al usuario el ID del producto y lo almaceno en una nueva variable con el producto seleccionado
-let productoSeleccionado = parseInt(prompt("Ingrese el ID del producto que desea comprar:"));
-const ropaBuscada = ropas.find(ropa => ropa.id === productoSeleccionado);
-const accesorioBuscado = accesorios.find(accesorio => accesorio.id === productoSeleccionado);
-const juegoBuscado = juegos.find(juego => juego.id === productoSeleccionado);
 
-let cantidad = parseInt(prompt("Ingrese la cantidad de unidades que quiere comprar del producto seleccionado:"));
-
-//Costo de envio promedio a todo el país
-const envio = 1200;
-
-//Salidas de consola indicando el precio final de la compra segun el producto elegido por el usuario
-if (productoSeleccionado <= 0) {
-    alert("Ingresa un ID válido");
-} else if (productoSeleccionado <= 4) {
-    alert("El precio final de tu compra es: $" + calculoPrecio(ropaBuscada.precio, cantidad, envio));
-    alert("¡Gracias por tu compra y por elegirnos, Saludos Saiyajin! 🔥")
-    ropaBuscada.vender(cantidad);
-} else if (productoSeleccionado <= 7) {
-    alert("El precio final de tu compra es: $" + calculoPrecio(accesorioBuscado.precio, cantidad, envio));
-    alert("¡Gracias por tu compra y por elegirnos, Saludos Saiyajin! 🔥")
-    accesorioBuscado.vender(cantidad);
-} else if (productoSeleccionado <= 9) {
-    alert("El precio final de tu compra es: $" + calculoPrecio(juegoBuscado.precio, cantidad, envio));
-    alert("¡Gracias por tu compra y por elegirnos, Saludos Saiyajin! 🔥")
-    juegoBuscado.vender(cantidad);
-} else {
-    alert("Ingresa un ID válido");
-}

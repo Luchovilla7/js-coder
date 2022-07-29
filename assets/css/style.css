@@ -1,0 +1,86 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
+#container-general {
+    display: flex;
+    flex-direction: row;
+}
+
+#section-productos {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+.card-product {
+    width: 40%;
+    margin: 20px;
+    text-align: center;
+}
+
+.font {
+    font-size: 16px;
+    font-family: oswald, sans-serif;
+}
+
+.img-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.img-container img {
+    width: 90%;
+    height: 50%;
+    margin: 10px;
+}
+
+.boton {
+    font-size: 15px;
+    font-family: oswald, sans-serif;
+    width: 50%;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    align-self: center;
+    color: #000;
+    background-color: #ee8c29;
+    border-radius: 25px;
+}
+
+.boton:hover{
+    color: #fff;
+    background-color: #1b00a0;
+}
+
+.info-producto {
+    display: flex;
+    flex-direction: column;
+}
+
+#section-carrito {
+    font-family: oswald, sans-serif;
+    width: 20%;
+    height: 30%;
+    margin: 30px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: #d0bb1d;
+    border-radius: 45px;
+    position: sticky;
+    top: 10px;
+}
+
+#section-carrito div {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
