@@ -6,6 +6,21 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 
+.navcolor {
+    background-color: #ee8c29 !important;
+    height: 60px;
+}
+
+.nameh1 {
+    color: #000 !important;
+    font-weight: bold;
+}
+
+.nameh1:hover {
+    color: #d0bb1d !important;
+}
+
+
 #container-general {
     display: flex;
     flex-direction: row;
