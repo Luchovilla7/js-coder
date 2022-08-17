@@ -1,118 +1,230 @@
-//Array de objetos de los productos 
+const cartBtn = document.querySelector(".cart-btn");
+const closeCartBtn = document.querySelector(".close-cart");
+const clearCartBtn = document.querySelector(".clear-cart");
+const cartDOM = document.querySelector(".cart");
+const cartOverlay = document.querySelector(".cart-overlay");
+const cartItems = document.querySelector(".cart-items");
+const cartTotal = document.querySelector(".cart-total");
+const cartContent = document.querySelector(".cart-content");
+const cartFooterDOM = document.querySelector(".cart-footer");
+const emptyCartFooterDOM = document.querySelector(".empty-cart-footer");
+const productsDOM = document.querySelector(".products-center");
 
-const productos =[
-    {id:01, tipo:"Ropa", nombre:"Remera Vegeta Dark", precio: 4300, foto: "assets/img/remera-vegeta.jpg"},
-    {id:02, tipo:"Accesorios", nombre:"Esferas del Dragon", precio: 12000, foto: "assets/img/esferas.jpg"},
-    {id:03, tipo:"Accesorios", nombre:"Figura Gogeta", precio: 10000, foto: "assets/img/gogeta-figure.jpg"},
-    {id:04, tipo:"Accesorios", nombre:"Lampara Henki Dama", precio: 5800, foto: "assets/img/lampara-goku.jpg"},
-    {id:05, tipo:"Accesorios", nombre:"Poster Saga de Cell", precio: 3000, foto: "assets/img/poster.png"},
-    {id:06, tipo:"Ropa", nombre:"Remera Light Dragon Ball", precio: 4000, foto: "assets/img/db.jpg"},
-    {id:07, tipo:"Accesorios", nombre:"Taza + individual", precio: 2500, foto: "assets/img/tazas-individual.jpg"},
-    {id:08, tipo:"Accesorios", nombre:"Stickers", precio: 500, foto: "assets/img/stickers.jpg"},
-    {id:09, tipo:"Juego de Cartas", nombre:"Game Cards Dragon Ball", precio: 1600, foto: "assets/img/juego.db.jpg"}
-];
+//cart
+let cart = [];
 
-//inicializo la variable carrito con una funcion para que detecte si existen valores en el storage
-let carrito = cargarCarrito();
+//buttons 
+let buttonsDOM = [];
 
-//tomo control sobre las secciones del HTML
-let sectionProductos = document.getElementById("section-productos");
-let sectionCarrito = document.getElementById("section-carrito");
-
-//creacion de la seccion carrito con DOM
-let totalCompra = document.createElement("div");
-totalCompra.innerHTML = "<h2>Total: $</h2>";
-sectionCarrito.appendChild(totalCompra);
-
-let montoTotalCompra = document.createElement("h2");
-montoTotalCompra.innerText = "0";
-totalCompra.appendChild(montoTotalCompra);
-
-let cantidadProductos = document.createElement("div");
-cantidadProductos.innerHTML = "<h3>Cantidad: </h3>";
-sectionCarrito.appendChild(cantidadProductos);
-
-let cantProductos = document.createElement("h3");
-cantProductos.innerText = "0";
-cantidadProductos.appendChild(cantProductos);
-
-let botonFinalizar = document.createElement("button");
-botonFinalizar.innerText = "Finalizar compra";
-sectionCarrito.appendChild(botonFinalizar);
-botonFinalizar.setAttribute("class", "boton");
-
-//Le agrego un evento al boton para que muestre el precio final
-botonFinalizar.onclick = () => {
-  const precioFinal = montoTotalCompra.innerText;
-  //uso sweet alert para que el usuario confirme su compra, cuando toca si se vacia el carrito
-  Swal.fire({
-    title: '¿Seguro que queres finalizar tu compra?',
-    text: `Total a abonar: $${precioFinal}`,
-    showCancelButton: true,
-    confirmButtonColor: '#008f39',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si',
-    cancelButtonText: 'No'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire(
-        'Gracias por tu compra',
-        '¡Saludos Saiyajin🔥!',
-        'success'
-      )
-      vaciarCarrito();
+//products
+const getProducts = async () => {
+    try {
+        let response = await fetch("products.json");
+        let data = await response.json();
+        let products = data;
+        return products;
+    } catch (error) {
+        console.log(error);
     }
-  })
 }
 
-//renderizado de los productos en cards
-for (const producto of productos) {
-  let container = document.createElement("div");
-  container.setAttribute("class", "card-product");
-  container.innerHTML = ` <div class="img-container">
-                            <img src="${producto.foto}" alt="${producto.nombre}" class="img-product"/>
-                            </div>
-                            <div class="info-producto">
-                            <p class="font">${producto.nombre}</p>
-                            <strong class="font">$${producto.precio}</strong>
-                            <button class="boton" id="btn${producto.id}"> Agregar al carrito </button>
-                            </div>`;
-  sectionProductos.appendChild(container);
-  //Evento para que los productos se agreguen al carrito al hacer click en el boton
-  document.getElementById(`btn${producto.id}`).onclick = () => agregarAlCarrito(`${producto.id}`);
+//UI
+const displayProducts = products => {
+    for (const product of products) {
+        let displayProducts = document.createElement("article");
+        displayProducts.className = "product";
+        displayProducts.innerHTML = `
+        <div class="img-container">
+            <img src=${product.image} alt="Producto" class="product-img">
+            <button class="bag-btn" data-id=${product.id}>
+                <i class="fa-solid fa-cart-shopping"></i>
+                Agregar al carrito
+            </button>
+        </div>
+        <h3>${product.title}</h3>
+        <h4>$${product.price}</h4>
+        `;
+        productsDOM.appendChild(displayProducts);
+    }
 }
 
-//Funciones
-function agregarAlCarrito(id) {
-  carrito.push(productos.find(p => p.id == id));
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-  calcularTotalCarrito();
+const getButtons = () => {
+    const buttons = [...document.querySelectorAll(".bag-btn")];
+    buttonsDOM = buttons; 
+    buttons.forEach(btn => {
+        let id = btn.dataset.id;
+        let inCart = cart.find(product => product.id == id);
+        if (inCart) {
+            btn.innerText = "Agregado";
+            btn.disabled = true;
+        } 
+        btn.addEventListener("click", e => {
+            e.target.innerText = "Agregado";
+            e.target.disabled = true;
+            let cartItem = {...getProduct(id), amount: 1}; 
+            cart = [...cart, cartItem];
+            saveCart(cart);
+            setCartValues(cart);
+            addCartItem(cartItem);
+            showCart();
+        });
+    });
 }
 
-function calcularTotalCarrito() {
-  let total = 0;
-  for (const producto of carrito) {
-    total += producto.precio;
-  }
-  montoTotalCompra.innerText = total;
-  cantProductos.innerText = carrito.length;
+const setCartValues = cart => {
+    let tempTotal = 0;
+    let itemsTotal = 0; 
+    cart.map(item => {
+        tempTotal += item.price * item.amount;
+        itemsTotal += item.amount; 
+    });
+    cartTotal.innerText = tempTotal;
+    cartItems.innerText = itemsTotal;
+    if (cart.length <= 0) {
+        emptyCartFooterDOM.style.display = "block";
+        cartFooterDOM.style.display = "none";
+    } else {
+        emptyCartFooterDOM.style.display = "none";
+        cartFooterDOM.style.display = "block";
+    }
 }
 
-function vaciarCarrito() {
-  montoTotalCompra.innerText = "0";
-  cantProductos.innerText = "0";
-  localStorage.clear();
-  carrito = [];
+const addCartItem = item => {
+    let div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+    <img src="${item.image}" alt="Producto">
+    <div>
+        <h4>${item.title}</h4>
+        <h5>$${item.price}</h5>
+        <span class="remove-item" data-id=${item.id}>Eliminar</span>
+    </div>
+    <div>
+        <i class="fa-solid fa-chevron-up" data-id=${item.id}></i>
+        <p class="item-amount">${item.amount}</p>
+        <i class="fa-solid fa-chevron-down" data-id=${item.id}></i>
+    </div>
+    `;
+    cartContent.appendChild(div);
 }
 
-function cargarCarrito() {
-  let carrito = JSON.parse(localStorage.getItem("carrito"));
-  if (carrito == null) {
-    return [];
-  } else {
-    return carrito;
-  }
+const showCart = () => {
+    cartOverlay.classList.add("transparent-bcg");
+    cartDOM.classList.add("show-cart");
 }
 
+const setupApp = () => {
+    cart = getCart();
+    setCartValues(cart);
+    populateCart(cart);
+    cartBtn.addEventListener("click", showCart);
+    closeCartBtn.addEventListener("click", hideCart);
+}
 
+const populateCart = cart => {
+    cart.forEach(item => addCartItem(item));
+}
 
+const hideCart = () => {
+    cartOverlay.classList.remove("transparent-bcg");
+    cartDOM.classList.remove("show-cart");
+}
+
+const cartLogic = () => {
+    clearCartBtn.addEventListener("click", () => {
+        swal({
+            title: "¿Estás seguro que querés vaciar tu carrito?",
+            buttons: {
+                cancel: {
+                    text: "Cancelar",
+                    value: false,
+                    visible: true
+                },
+                confirm: {
+                    text: "Sí, estoy seguro",
+                    value: true,
+                    visible: true,
+                    closeModal: true
+                }
+            }
+        }).then(willDelete => willDelete && clearCart());
+    });
+
+    cartContent.addEventListener("click", e => {
+        if (e.target.classList.contains("remove-item")) {
+            let removeCartItem = e.target;
+            let id = removeCartItem.dataset.id;
+            cartContent.removeChild(removeCartItem.parentElement.parentElement);
+            removeItem(id);
+        } else if (e.target.classList.contains("fa-chevron-up")) {
+            let addAmount = e.target;
+            let id = addAmount.dataset.id; 
+            let tempItem = cart.find(item => item.id == id);
+            tempItem.amount++; 
+            saveCart(cart);
+            setCartValues(cart);
+            addAmount.nextElementSibling.innerText = tempItem.amount;
+        } else if (e.target.classList.contains("fa-chevron-down")) {
+            let lowerAmount = e.target;
+            let id = lowerAmount.dataset.id; 
+            let tempItem = cart.find(item => item.id == id);
+            tempItem.amount--; 
+            if (tempItem.amount > 0) {
+                saveCart(cart);
+                setCartValues(cart);
+                lowerAmount.previousElementSibling.innerText = tempItem.amount;
+            } else {
+                cartContent.removeChild(lowerAmount.parentElement.parentElement);
+                removeItem(id);
+            }
+        }
+    });
+}
+
+const clearCart = () => {
+    let cartItems = cart.map(item => item.id);
+    cartItems.forEach(id => removeItem(id));
+    while (cartContent.children.length > 0) {
+        cartContent.removeChild(cartContent.children[0]);
+    }
+    hideCart();
+}
+
+const removeItem = id => {
+    cart = cart.filter(item => item.id != id);
+    setCartValues(cart);
+    saveCart(cart);
+    let button = getSingleButton(id);
+    button.disabled = false;
+    button.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Agregar al carrito`;
+}
+
+const getSingleButton = id => buttonsDOM.find(button => button.dataset.id == id);
+
+//localstorage
+const saveProducts = products => {
+    localStorage.setItem("products", JSON.stringify(products));
+}
+
+const getProduct = id => {
+    products = JSON.parse(localStorage.getItem("products"));
+    return products.find(product => product.id == id);
+}
+
+const saveCart = cart => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+const getCart = () => localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
+
+//setup app
+setupApp();
+
+//get all products 
+getProducts().then(products => {
+    displayProducts(products);
+    saveProducts(products);
+}).then(() => {
+    getButtons();
+    cartLogic();
+});
