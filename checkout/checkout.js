@@ -48,7 +48,6 @@ const setupCheckout = () => {
     setCheckoutTotal(cartSummary);
 }
 
-//house or flat
 const shippingDOM = () => {
     flatRadioBtn.addEventListener("click", () => {
         if (flatRadioBtn.checked) {
@@ -68,7 +67,7 @@ const shippingDOM = () => {
     });
 }
 
-//check form validity
+//validación check del form
 const validateForm = () => {
     form.noValidate = true;
     form.addEventListener("submit", e => {
@@ -103,11 +102,10 @@ const checkInputs = input => {
     const streetValue = street.value.trim();
     const numberValue = number.value.trim();
 
-    //regex
     const lettersPattern = /^[A-ZÀ-Ú]+$/i;
     const numbersPattern = /^[0-9]+$/;
 
-    //logic
+    //logica
     switch (input) {
         case email:
             if (emailValue === "") {
@@ -186,10 +184,10 @@ const checkInputs = input => {
     }
 }
 
-//validate email
+//validar correo
 const isEmail = email => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
 
-//success-error messages
+//error messages
 const setErrorFor = (input, message) => {
     const formControl = input.parentElement;
     const small = formControl.querySelector("small");
