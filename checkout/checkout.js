@@ -79,7 +79,7 @@ const validateForm = () => {
         if (form.checkValidity()) {
             swal({
                 title: "Te estamos redirigiendo a Mercado Pago",
-                text: "¡Gracias por elegirnos!",
+                text: "¡Gracias por elegirnos y Saludos Saiyajin🔥!",
                 button: false
             }).then(setTimeout(() => {
                 mercadopago();

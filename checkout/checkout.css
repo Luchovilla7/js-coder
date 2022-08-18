@@ -27,7 +27,7 @@ input[type=radio] {
 
 .form-control input:focus {
     outline: none;
-    box-shadow: 1.4px 0 var(--primaryColor);
+    box-shadow: 1.4px 0 #b8001f;
 }
 
 .form-control.success input {
@@ -76,7 +76,7 @@ input[type=radio] {
 }
 
 .checkout-subtitle {
-    color: var(--primaryColor);
+    color: #b8001f;
     font-size: 1.15rem;
     margin-bottom: 0.75rem;
 }

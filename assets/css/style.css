@@ -82,10 +82,11 @@ body {
 }
 
 .banner-title {
-    font-size: 3.4rem;
+    font-size: 25px;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
-    margin-bottom: 3rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
 }
 
 .banner-btn {
@@ -279,7 +280,7 @@ body {
 }
 
 .remove-item {
-    color: grey;
+    color: #b8001f;
     cursor: pointer;
 }
 
