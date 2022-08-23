@@ -3,83 +3,83 @@
         "id": 1, 
         "title": "Figura Gogeta Blue", 
         "price": 15000, 
-        "image": "assets/img/gogeta-figure.jpg"
+        "image": "../assets/img/gogeta-figure.jpg"
     },
 
     {
         "id": 2, 
         "title": "Juego de Cartas", 
         "price": 3500, 
-        "image": "assets/img/juego-db.jpg"
+        "image": "../assets/img/juego-db.jpg"
     },
 
     {
         "id": 3, 
         "title": "Esferas del dragon", 
         "price": 18000, 
-        "image": "assets/img/esferas.jpg"
+        "image": "../assets/img/esferas.jpg"
     },
 
     {
         "id": 4, 
         "title": "200 Stickers", 
         "price": 500, 
-        "image": "assets/img/stickers.jpg"
+        "image": "../assets/img/stickers.jpg"
     },
 
     {
         "id": 5, 
         "title": "Remera Dark Vegeta", 
         "price": 7500, 
-        "image": "assets/img/remera-vegeta.jpg"
+        "image": "../assets/img/remera-vegeta.jpg"
     },
 
     {
         "id": 6, 
         "title": "Poster Saga de Cell", 
         "price": 2700, 
-        "image": "assets/img/poster.jpg"
+        "image": "../assets/img/poster.jpg"
     },
 
     {
         "id": 7, 
         "title": "Taza + individual", 
         "price": 800, 
-        "image": "assets/img/tazas-individual.jpg"
+        "image": "../assets/img/tazas-individual.jpg"
     },
 
     {
         "id": 8, 
         "title": "Remera White Goku DB", 
         "price": 5000, 
-        "image": "assets/img/db.jpg"
+        "image": "../assets/img/db.jpg"
     },
 
     {
         "id": 9, 
         "title": "Cuadro Sheng Long", 
         "price": 7800, 
-        "image": "assets/img/cuadro.jpg"
+        "image": "../assets/img/cuadro.jpg"
     },
 
     {
         "id": 10, 
         "title": "Lampara Henki Dama", 
         "price": 8600, 
-        "image": "assets/img/lampara-goku.jpg"
+        "image": "../assets/img/lampara-goku.jpg"
     },
 
     {
         "id": 11, 
         "title": "Pantalon de ejercicio", 
         "price": 7500, 
-        "image": "assets/img/pantalon.jpg"
+        "image": "../assets/img/pantalon.jpg"
     },
 
     {
         "id": 12, 
         "title": "Funko pop de Sheng Long", 
         "price": 7000, 
-        "image": "assets/img/funko-pop-sl.jpg"
+        "image": "../assets/img/funko-pop-sl.jpg"
     }
 ]
